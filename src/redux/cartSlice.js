@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+const items = localStorage.getItem('cartItems') != null ? JSON.parse
+(localStorage.getItem('cartItems')) : []
 
 
 export const cartSlice = createSlice ({
     name: 'cart',
     initialState: {
-    cartItems: []
+    cartItems: items,
     },
     reducers: {
     addItemToCart: (state, action) => {
@@ -16,11 +18,15 @@ export const cartSlice = createSlice ({
         quantity: action.payload.quantity,
         totalPrice: action.payload.quantity * action.payload.element.price
        })
+       localStorage.setItem('cartItems', JSON.stringify(state.cartItems.map
+        (item=>item)))
     },
     removeItemFromCart: (state, action) => {
         state.cartItems = state.cartItems.filter(
             cartItem => cartItem.id !== action.payload.cartItemId
         )
+        localStorage.setItem('cartItems', JSON.stringify(state.cartItems.map
+            (item=>item)))
     }
     }
 })
